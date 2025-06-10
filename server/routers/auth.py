@@ -78,7 +78,9 @@ async def signup(
             os.rename(temp_file_path, new_filepath)
             
             # Update the user with the avatar path
-            avatar_url = f"/{new_filepath.replace('\\', '/')}"  # Convert Windows paths to URL format
+            # Convert path to URL format in a cross-platform way
+            normalized_path = os.path.normpath(new_filepath)
+            avatar_url = f"/{normalized_path.replace(os.sep, '/').lstrip('/')}"
             await db.accounts.update_one(
                 {"_id": result.inserted_id},
                 {"$set": {"avatar": avatar_url}}
