@@ -1,15 +1,14 @@
 import { Button } from "@mui/material";
 import AmountTextField from "./AmountTextField";
 import TagSelector from "./TagSelector";
-import React, { useState } from 'react';
-import { TextField, CircularProgress, Snackbar, Alert } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
-import DoneIcon from '@mui/icons-material/Done';
-import axiosInstance from '@/config/axios';
-import { useAuth } from '@/contexts/AuthContext';
-import { useExpenses } from '@/contexts/ExpenseContext';
+import React, { useState } from "react";
+import { TextField, CircularProgress, Snackbar, Alert } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import DoneIcon from "@mui/icons-material/Done";
+import { useAuth } from "@/contexts/AuthContext";
+import { useExpenses } from "@/contexts/ExpenseContext";
 
 interface ExpenseFormProps {
   onExpenseAdded?: () => void;
@@ -24,7 +23,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const { user } = useAuth();
-  const { createExpense,refetchExpenses } = useExpenses();
+  const { createExpense, refetchExpenses } = useExpenses();
 
   // Reset form fields
   const resetForm = () => {
@@ -37,29 +36,31 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!amount || !selectedDate || !selectedTagId) {
-      setError('Vui lòng điền đầy đủ thông tin và chọn danh mục');
-      return;
-    }
-    
-    if (!user?._id) {
-      setError('Vui lòng đăng nhập để tiếp tục');
+      setError("Vui lòng điền đầy đủ thông tin và chọn danh mục");
       return;
     }
 
-    if (!user) { return; }
+    if (!user?._id) {
+      setError("Vui lòng đăng nhập để tiếp tục");
+      return;
+    }
+
+    if (!user) {
+      return;
+    }
 
     try {
       setIsSubmitting(true);
       setError(null);
-      
+
       const expenseData = {
         amount: parseFloat(amount),
         desc: note,
         tagId: selectedTagId,
         expense_date: selectedDate.toISOString(),
-        account_id: user._id
+        account_id: user._id,
       };
 
       const response = await createExpense(expenseData);
@@ -73,8 +74,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
         await refetchExpenses();
       }
     } catch (err) {
-      console.error('Error adding expense:', err);
-      setError('Có lỗi xảy ra khi thêm chi tiêu. Vui lòng thử lại.');
+      console.error("Error adding expense:", err);
+      setError("Có lỗi xảy ra khi thêm chi tiêu. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -87,22 +88,24 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-full mx-auto">
-      <h2 className="text-lg font-semibold mb-6 text-gray-800 text-left">Thêm chi tiêu mới</h2>
-      <Snackbar 
-        open={!!error || success} 
-        autoHideDuration={6000} 
+      <h2 className="text-lg font-semibold mb-6 text-gray-800 text-left">
+        Thêm chi tiêu mới
+      </h2>
+      <Snackbar
+        open={!!error || success}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={success ? 'success' : 'error'}
-          sx={{ width: '100%' }}
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={success ? "success" : "error"}
+          sx={{ width: "100%" }}
         >
-          {success ? 'Thêm chi tiêu thành công!' : error}
+          {success ? "Thêm chi tiêu thành công!" : error}
         </Alert>
       </Snackbar>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
           <label
@@ -111,7 +114,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
           >
             Số tiền <span className="text-red-500">*</span>
           </label>
-          <AmountTextField 
+          <AmountTextField
             value={amount}
             onAmountChange={(amount) => setAmount(amount.toString())}
           />
@@ -127,13 +130,15 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
               onChange={(tagId) => {
                 setSelectedTagId(tagId);
                 // Clear error when user selects a tag
-                if (tagId && error?.includes('danh mục')) {
+                if (tagId && error?.includes("danh mục")) {
                   setError(null);
                 }
               }}
             />
-            {!selectedTagId && error?.includes('danh mục') && (
-              <p className="text-red-500 text-xs mt-1">Vui lòng chọn loại chi tiêu</p>
+            {!selectedTagId && error?.includes("danh mục") && (
+              <p className="text-red-500 text-xs mt-1">
+                Vui lòng chọn loại chi tiêu
+              </p>
             )}
           </div>
         </div>
@@ -184,12 +189,18 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
             },
             "&:disabled": {
               backgroundColor: "#e0e0e0",
-              color: "#9e9e9e"
-            }
+              color: "#9e9e9e",
+            },
           }}
-          endIcon={isSubmitting ? <CircularProgress size={24} color="inherit" /> : <DoneIcon />}
+          endIcon={
+            isSubmitting ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <DoneIcon />
+            )
+          }
         >
-          {isSubmitting ? 'Đang thêm...' : 'Thêm ngay'}
+          {isSubmitting ? "Đang thêm..." : "Thêm ngay"}
         </Button>
       </form>
     </div>

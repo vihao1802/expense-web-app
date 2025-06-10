@@ -1,51 +1,50 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Button, 
-  TextField, 
-  Typography, 
-  Card, 
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Button,
+  TextField,
+  Typography,
+  Card,
   Box,
   InputAdornment,
   Avatar,
   IconButton,
   Stack,
   Alert,
-  CircularProgress
-} from '@mui/material';
-import { validatePassword, isValidEmail } from '../../utils/validators';
-import { 
-  Person as PersonIcon, 
-  Email as EmailIcon, 
+  CircularProgress,
+} from "@mui/material";
+import { validatePassword, isValidEmail } from "../../utils/validators";
+import {
+  Person as PersonIcon,
+  Email as EmailIcon,
   Lock as LockIcon,
   Upload as UploadIcon,
   DeleteOutline as TrashIcon,
   Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon
-} from '@mui/icons-material';
-import { toast } from 'react-hot-toast';
-import type { SignUpFormData } from '../../types/auth'; 
-import { useAuth } from '@/contexts/AuthContext';
+  VisibilityOff as VisibilityOffIcon,
+} from "@mui/icons-material";
+import type { SignUpFormData } from "../../types/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<SignUpFormData>({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
     avatar: null,
   });
-  const [avatarPreview, setAvatarPreview] = useState<string>('');
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
-  const { signUp,checkAuth } = useAuth();
+  const { signUp, checkAuth } = useAuth();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
-    setFormData(prev => ({ ...prev, email: newEmail }));
-    
+    setFormData((prev) => ({ ...prev, email: newEmail }));
+
     if (newEmail && !isValidEmail(newEmail)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError("Please enter a valid email address");
     } else {
       setEmailError(null);
     }
@@ -53,18 +52,19 @@ export default function SignUp() {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
-    setFormData(prev => ({ ...prev, password: newPassword }));
-    
+    setFormData((prev) => ({ ...prev, password: newPassword }));
+
     const { error } = validatePassword(newPassword);
     setPasswordError(error || null);
   };
-
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 
@@ -74,16 +74,16 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     // Validate password before submitting
     const { isValid, error } = validatePassword(formData.password);
     if (!isValid) {
-      setPasswordError(error || 'Invalid password');
+      setPasswordError(error || "Invalid password");
       return;
     }
-    
+
     setLoading(true);
-    
+
     // Clean up the preview URL when submitting
     if (avatarPreview) {
       URL.revokeObjectURL(avatarPreview);
@@ -97,7 +97,7 @@ export default function SignUp() {
         avatar: formData.avatar,
       });
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed');
+      setError(err.response?.data?.detail || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -107,9 +107,9 @@ export default function SignUp() {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setAvatarPreview(URL.createObjectURL(file));
-      setFormData({ 
-        ...formData, 
-        avatar: file
+      setFormData({
+        ...formData,
+        avatar: file,
       });
     }
   };
@@ -119,16 +119,25 @@ export default function SignUp() {
       URL.revokeObjectURL(avatarPreview);
     }
     setFormData({ ...formData, avatar: null });
-    setAvatarPreview('');
+    setAvatarPreview("");
   };
 
   useEffect(() => {
     checkAuth();
-  },[])
+  }, []);
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', height: '100%', maxWidth: 400, margin: 'auto' }}>
-      <Card sx={{ p: 3, width: '100%' }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        height: "100%",
+        maxWidth: 400,
+        margin: "auto",
+      }}
+    >
+      <Card sx={{ p: 3, width: "100%" }}>
         <Typography variant="h4" component="h1" align="center" gutterBottom>
           Sign Up
         </Typography>
@@ -138,7 +147,9 @@ export default function SignUp() {
               fullWidth
               label="Full Name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -166,7 +177,7 @@ export default function SignUp() {
             <TextField
               fullWidth
               label="Password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handlePasswordChange}
               margin="normal"
@@ -187,13 +198,17 @@ export default function SignUp() {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      {showPassword ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
             />
-            <Box >
+            <Box>
               <Stack spacing={2} alignItems="center" justifyContent="center">
                 {avatarPreview && (
                   <Box
@@ -201,9 +216,9 @@ export default function SignUp() {
                     sx={{
                       width: 100,
                       height: 100,
-                      '&:hover .delete-avatar-btn': {
+                      "&:hover .delete-avatar-btn": {
                         opacity: 1,
-                        visibility: 'visible',
+                        visibility: "visible",
                       },
                     }}
                   >
@@ -215,18 +230,18 @@ export default function SignUp() {
                       className="delete-avatar-btn"
                       onClick={handleRemoveAvatar}
                       sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'rgba(0, 0, 0, 0.5)',
-                        color: 'white',
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        bgcolor: "rgba(0, 0, 0, 0.5)",
+                        color: "white",
                         p: 0.5,
                         opacity: 0,
-                        visibility: 'hidden',
-                        transition: 'all 0.2s ease-in-out',
-                        '&:hover': {
-                          bgcolor: 'rgba(0, 0, 0, 0.7)',
+                        visibility: "hidden",
+                        transition: "all 0.2s ease-in-out",
+                        "&:hover": {
+                          bgcolor: "rgba(0, 0, 0, 0.7)",
                         },
                       }}
                     >
@@ -242,7 +257,7 @@ export default function SignUp() {
                   sx={{
                     "&:hover": {
                       bgcolor: "white",
-                    }
+                    },
                   }}
                 >
                   Upload Avatar
@@ -263,18 +278,21 @@ export default function SignUp() {
               size="large"
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} /> : "Sign Up"}
             </Button>
             {error && (
               <Alert severity="error" sx={{ mt: 2 }}>
                 {error}
               </Alert>
             )}
-            <Box textAlign="center" sx={{
-              ":hover": {
-                color: "primary.main",
-              }
-            }}>
+            <Box
+              textAlign="center"
+              sx={{
+                ":hover": {
+                  color: "primary.main",
+                },
+              }}
+            >
               <Link to="/sign-in">Already have an account? Sign in</Link>
             </Box>
           </Stack>
