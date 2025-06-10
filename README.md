@@ -2,6 +2,21 @@
 
 A full-stack web application for tracking and managing daily expenses with user authentication and data visualization.
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="./screenshots/dashboard.png" alt="Dashboard" width="400"/>
+  <p><em>Dashboard Overview</em></p>
+  
+  <img src="./screenshots/add-expense.png" alt="Add Expense" width="400"/>
+  <p><em>Add New Expense</em></p>
+  
+  <img src="./screenshots/reports.png" alt="Expense Reports" width="400"/>
+  <p><em>Expense Reports</em></p>
+</div>
+
+[More Screenshots](./screenshots)
+
 ## 🚀 Features
 
 - **User Authentication**: Secure login and registration system
