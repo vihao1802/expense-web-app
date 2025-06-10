@@ -27,8 +27,7 @@ A full-stack web application for tracking and managing daily expenses with user 
 - Python
 - FastAPI (Web framework)
 - SQLAlchemy (ORM)
-- SQLite (Database - Development)
-- PostgreSQL (Database - Production)
+- MongoDB Atlas
 - JWT (Authentication)
 - Pydantic (Data validation)
 
