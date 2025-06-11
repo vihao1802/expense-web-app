@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   AppBar,
   Toolbar,
@@ -12,15 +12,15 @@ import {
   IconButton,
   ListItemIcon,
   Skeleton,
-} from '@mui/material';
-import { Logout as LogoutIcon } from '@mui/icons-material';
+} from "@mui/material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 
 const getInitials = (name?: string | null): string => {
-  if (!name) return 'U';
+  if (!name) return "U";
   return name
-    .split(' ')
+    .split(" ")
     .map((part) => part[0])
-    .join('')
+    .join("")
     .toUpperCase();
 };
 
@@ -40,42 +40,42 @@ const Header = () => {
 
   const handleLogout = (): void => {
     signOut();
-    navigate('/login');
+    navigate("/login");
   };
 
   // Show skeleton when user data is loading
   if (user === null || user === undefined) {
     return (
-      <AppBar 
-        position="static" 
-        color="default" 
+      <AppBar
+        position="static"
+        color="default"
         elevation={0}
         sx={{
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-          backgroundColor: 'white',
+          backgroundColor: "white",
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between', width: '100%' }}>
-          <Typography 
-              variant="h6" 
-              component={Link}
-              to="/"
-              noWrap 
-              sx={{ 
-                flexGrow: 1,
-                textDecoration: 'none',
-                color: 'inherit',
-                '&:hover': {
-                  textDecoration: 'none',
-                },
-                fontSize: { xs: '1.25rem', sm: '1.5rem' },
-                lineHeight: 1.2,
-                fontWeight: 700,
-              }}
-            >
-              Expense Tracker
-            </Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
+        <Toolbar sx={{ justifyContent: "space-between", width: "100%" }}>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            noWrap
+            sx={{
+              flexGrow: 1,
+              textDecoration: "none",
+              color: "inherit",
+              "&:hover": {
+                textDecoration: "none",
+              },
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              lineHeight: 1.2,
+              fontWeight: 700,
+            }}
+          >
+            Expense Tracker
+          </Typography>
+          <Box sx={{ display: "flex", gap: 2 }}>
             <Skeleton variant="rectangular" width={80} height={36} />
             <Skeleton variant="circular" width={40} height={40} />
           </Box>
@@ -85,56 +85,63 @@ const Header = () => {
   }
 
   return (
-    <AppBar 
-      position="static" 
-      color="default" 
+    <AppBar
+      position="static"
+      color="default"
       elevation={0}
       sx={{
-        borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        backgroundColor: 'white',
+        backgroundColor: "white",
+        paddingX: {
+          xs: 0,
+          sm: 3,
+        },
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+          padding: "0px !important",
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+        }}
+      >
         <Typography
           variant="h6"
           component={Link}
           to="/"
           noWrap
           sx={{
-            flexGrow: 1, 
-            textDecoration: 'none', 
-            color: 'inherit',
-            '&:hover': {
-              textDecoration: 'none',
+            flexGrow: 1,
+            textDecoration: "none",
+            color: "inherit",
+            "&:hover": {
+              textDecoration: "none",
             },
-            fontSize: { xs: '1.25rem', sm: '1.5rem' },
+            fontSize: { xs: "1.25rem", sm: "1.5rem" },
             lineHeight: 1.2,
             fontWeight: 700,
           }}
         >
           Expense Tracker
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography>
-              {user.name}
-            </Typography>
-            <IconButton
-              onClick={handleMenu}
-              size="small"
-              sx={{ ml: 1 }}
-              aria-controls={open ? 'account-menu' : undefined}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography>{user.name}</Typography>
+          <IconButton
+            onClick={handleMenu}
+            size="small"
+            sx={{ ml: 1 }}
+            aria-controls={open ? "account-menu" : undefined}
+          >
+            <Avatar
+              sx={{
+                width: 32,
+                height: 32,
+                bgcolor: "primary.main",
+                color: "white",
+              }}
             >
-              <Avatar 
-                sx={{ 
-                  width: 32, 
-                  height: 32, 
-                  bgcolor: 'primary.main',
-                  color: 'white',
-                }}
-              >
-                {getInitials(user.name)}
-              </Avatar>
-            </IconButton>
+              {getInitials(user.name)}
+            </Avatar>
+          </IconButton>
         </Box>
       </Toolbar>
       <Menu
@@ -146,30 +153,30 @@ const Header = () => {
         PaperProps={{
           elevation: 3,
           sx: {
-            overflow: 'visible',
+            overflow: "visible",
             mt: 1.5,
-            '& .MuiAvatar-root': {
+            "& .MuiAvatar-root": {
               width: 32,
               height: 32,
               ml: 1,
               mr: 1,
             },
-            '&:before': {
+            "&:before": {
               content: '""',
-              display: 'block',
-              position: 'absolute',
+              display: "block",
+              position: "absolute",
               top: 0,
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

@@ -16,7 +16,7 @@ const Main = () => {
             display: 'flex', 
             flexDirection: { xs: 'column', md: 'row' }, 
             gap: 3, 
-            p: 3
+            p: { xs: 0, sm: 3 }
           }}>
             <Box sx={{ 
               flex: { md: 2 }, 

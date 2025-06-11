@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import AmountTextField from "./AmountTextField";
 import TagSelector from "./TagSelector";
 import React, { useState } from "react";
@@ -87,7 +87,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md w-full mx-auto">
+    <Paper elevation={2} sx={{ p: 2 }}>
       <h2 className="text-lg font-semibold mb-6 text-gray-800 text-left">
         Thêm chi tiêu mới
       </h2>
@@ -203,7 +203,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onExpenseAdded }) => {
           {isSubmitting ? "Đang thêm..." : "Thêm ngay"}
         </Button>
       </form>
-    </div>
+    </Paper>
   );
 };
 

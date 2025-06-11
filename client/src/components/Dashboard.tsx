@@ -167,7 +167,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: { xs: "12px 0", sm: 3 } }}>
       {/* Summary Cards */}
       <SummaryCards
         totalExpenses={totalExpenses}
