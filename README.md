@@ -5,14 +5,14 @@ A full-stack web application for tracking and managing daily expenses with user 
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="./screenshots/dashboard.png" alt="Dashboard" width="400"/>
-  <p><em>Dashboard Overview</em></p>
+  <img src="./screenshots/expense-form.png" alt="Expense Form" width="400"/>
+  <p><em>Expense Form</em></p>
   
-  <img src="./screenshots/add-expense.png" alt="Add Expense" width="400"/>
-  <p><em>Add New Expense</em></p>
-  
-  <img src="./screenshots/reports.png" alt="Expense Reports" width="400"/>
-  <p><em>Expense Reports</em></p>
+  <img src="./screenshots/expense-general-chart.png" alt="Expense General Chart" width="400"/>
+  <p><em>Expense General Chart</em></p>
+
+  <img src="./screenshots/expense-chart-by-month.png" alt="Expense Chart By Month" width="400"/>
+  <p><em>Expense Chart By Month</em></p>
 </div>
 
 [More Screenshots](./screenshots)
@@ -137,8 +137,10 @@ cd expense-daily-managemnet
 │   ├── public/            # Static files
 │   └── src/               # React source code
 │       ├── components/    # Reusable UI components
-│       ├── pages/         # Page components
+│       ├── config/        # Configuration files
+│       ├── contexts/      # Contexts
 │       ├── services/      # API services
+│       ├── types/         # API types
 │       ├── utils/         # Utility functions
 │       └── App.jsx        # Main App component
 │
