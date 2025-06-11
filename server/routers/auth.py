@@ -19,6 +19,8 @@ from utils.file_utils import save_upload_file
 from pydantic import EmailStr, BaseModel, ValidationError
 from datetime import timezone
 from utils.password_validation import validate_password
+from fastapi import Response
+from utils.auth import add_to_blacklist
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -27,7 +29,7 @@ class SignupForm(BaseModel):
     email: EmailStr
     password: str
 
-@router.post("/signup", response_model=Account)
+@router.post("/signup", status_code=status.HTTP_201_CREATED)
 async def signup(
     name: str = Form(...),
     email: EmailStr = Form(...),
@@ -102,7 +104,34 @@ async def signup(
     del created_user["password"]
     del created_user["_id"]
     
-    return created_user
+    return {"message": "Successfully signed up"}
+
+@router.post("/signout")
+async def signout(
+    response: Response,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """
+    Sign out the current user by adding their token to the blacklist
+    and clearing the auth cookies
+    """
+    # Get the token from the Authorization header
+    from fastapi import Request
+    from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+    
+    credentials = HTTPBearer()
+    try:
+        # Extract the token from the Authorization header
+        token = credentials.credentials
+        add_to_blacklist(token)
+    except Exception:
+        pass  # If token extraction fails, we still want to clear cookies
+    
+    # Clear the cookies
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    
+    return {"message": "Successfully signed out"}
 
 @router.post("/signin", response_model=Token)
 async def signin(auth: Auth):

@@ -1,13 +1,10 @@
-from datetime import datetime, timedelta,timezone
+from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException
-from fastapi.security import HTTPBearer
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from configs.database import db
 from models.account import Account
-from typing import Annotated
 from bson import ObjectId
 
 from configs.config import settings
@@ -18,6 +15,17 @@ ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 REFRESH_TOKEN_EXPIRE_DAYS = settings.REFRESH_TOKEN_EXPIRE_DAYS
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# In-memory token blacklist (for production, use Redis or database)
+token_blacklist = set()
+
+def is_token_blacklisted(token: str) -> bool:
+    """Check if a token is in the blacklist"""
+    return token in token_blacklist
+
+def add_to_blacklist(token: str) -> None:
+    """Add a token to the blacklist"""
+    token_blacklist.add(token)
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -56,12 +64,24 @@ async def get_token_payload(credentials: HTTPAuthorizationCredentials = Depends(
     
     try:
         token = credentials.credentials
+        
+        # Check if token is blacklisted
+        if is_token_blacklisted(token):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has been revoked",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+            
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload is None:
+            raise credentials_exception
+            
         return payload
-    except jwt.ExpiredSignatureError:
+    except JWTError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired",
+            detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
     except (jwt.JWTError, JWTError):
