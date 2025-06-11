@@ -54,7 +54,7 @@ class AuthService {
   // Redirect to sign in page
   private redirectToSignIn() {
     // Using window.location to force a full page reload and clear any state
-    window.location.href = "/signin";
+    window.location.href = "/sign-in";
   }
 
   private redirectToHome() {
