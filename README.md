@@ -5,13 +5,13 @@ A full-stack web application for tracking and managing daily expenses with user 
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="./screenshots/expense-form.png" alt="Expense Form" width="400"/>
+  <img src="./screenshots/expense-form.png" alt="Expense Form"/>
   <p><em>Expense Form</em></p>
   
-  <img src="./screenshots/expense-general-chart.png" alt="Expense General Chart" width="400"/>
+  <img src="./screenshots/expense-general-chart.png" alt="Expense General Chart"/>
   <p><em>Expense General Chart</em></p>
 
-  <img src="./screenshots/expense-chart-by-month.png" alt="Expense Chart By Month" width="400"/>
+  <img src="./screenshots/expense-chart-by-month.png" alt="Expense Chart By Month"/>
   <p><em>Expense Chart By Month</em></p>
 </div>
 
